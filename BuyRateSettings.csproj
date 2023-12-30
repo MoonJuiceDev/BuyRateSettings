@@ -1,0 +1,15 @@
+﻿<Project Sdk="LethalCompany.Plugin.Sdk/1.0.2">
+
+	<PropertyGroup>
+		<Title>RateSettings</Title>
+		<Description>In-game alerts, jackpots, terminal command to refresh rate, min/max, randomizer, last day rates</Description>
+		<PluginId>MoonJuice.BuyRateSettings</PluginId>
+    <ThunderId>BuyRateSettings</ThunderId>
+		<Version>1.2.1</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="BuyRateSettings.csproj.user" />
+	</ItemGroup>
+  
+</Project>
