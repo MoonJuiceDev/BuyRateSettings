@@ -17,6 +17,7 @@ public static class BuyRateRefresher
         bool randomRateToggle = BuyRateModifier.randomRateToggle.Value;
 
         bool lastDayToggle = BuyRateModifier.lastDayToggle.Value;
+        float lastDayRangeChance = BuyRateModifier.lastDayRangeChance.Value;
         float lastDayMinRate = BuyRateModifier.lastDayMinRate.Value;
         float lastDayMaxRate = BuyRateModifier.lastDayMaxRate.Value;
         float daysUntilDeadline = TimeOfDay.Instance.daysUntilDeadline;
@@ -34,14 +35,27 @@ public static class BuyRateRefresher
         float alertDelaySeconds = BuyRateModifier.alertDelaySeconds.Value;
         float rateDelayTimeSeconds = 3;
 
-        int refreshLimit = BuyRateModifier.refreshLimit.Value;
+        int refreshLimitDaily = BuyRateModifier.refreshLimitDaily.Value;
 
-        // Reset RefreshCount on start of new round
-        if(BuyRateState.Value.RefreshCount >= refreshLimit)
+        // Reset RefreshCountDaily on start of new round
+        if (BuyRateState.Value.RefreshCountDaily >= refreshLimitDaily)
         {
-            BuyRateState.Value.RefreshCount = 0;
-            BuyRateModifier.mls.LogInfo("Reset RefreshCount");
+            BuyRateState.Value.RefreshCountDaily = 0;
+            BuyRateModifier.mls.LogInfo($"Reset RefreshCount-Daily (daily refresh count: {BuyRateState.Value.RefreshCountDaily})");
         }
+
+        //
+        // START OF RATE CALCULATIONS (this all works, don't touch it)
+        //
+        // This a series of else-if statements that follows an order of priority:
+        //
+        // Jackpot on last day
+        // Jackpot on any day
+        // Last day
+        // Random
+        // Min/Max
+        // Vanilla
+
 
         // Check for jackpot on last day and roll
         if(jackpotToggle && DateTime.Now.Millisecond % 100 / 100.0 <= jackpotChance && jackpotToggleLD && daysUntilDeadline <= 0)
@@ -90,12 +104,19 @@ public static class BuyRateRefresher
         // Check/set last day rate range
         else if(lastDayToggle && daysUntilDeadline <= 0)
         {
-            // Last day random range
-            if(lastDayMinRate != lastDayMaxRate)
+            // Last day random range hit
+            if(lastDayMinRate != lastDayMaxRate && DateTime.Now.Millisecond % 100 / 100.0 <= lastDayRangeChance)
             {
                 price = Next() * (lastDayMaxRate - lastDayMinRate) + lastDayMinRate;
 
-                BuyRateModifier.mls.LogInfo( "Last day rate (ranged) picked" );
+                BuyRateModifier.mls.LogInfo( "Last day rate (ranged-hit) picked" );
+            }
+
+            // Last day random range not hit (default to 100%)
+            else if(lastDayMinRate != lastDayMaxRate && DateTime.Now.Millisecond % 100 / 100.0 > lastDayRangeChance)
+            {
+                price = 1f;
+                BuyRateModifier.mls.LogInfo("Last day rate (ranged-nohit) picked");
             }
 
             // Last day no range
@@ -135,7 +156,11 @@ public static class BuyRateRefresher
             BuyRateModifier.mls.LogInfo( "Vanilla rate picked" );
         }
 
-        // Round price var for cleaner text
+        //
+        // END OF RATE CALCULATIONS
+        //
+
+        // Round price for cleaner text
         int priceRounded = (int)Math.Round( price * 100 );
 
         // Set buy rate

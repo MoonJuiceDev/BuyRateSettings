@@ -24,7 +24,7 @@ internal static class TerminalPatch
         {
             var node = ScriptableObject.CreateInstance<TerminalNode>();
             node.clearPreviousText = true;
-            node.displayText = $"\nAre you sure you want to refresh the current Company buying rate?\n\nThis can be done {BuyRateModifier.refreshLimit.Value} TIME(S) PER DAY.\n\nPlease CONFIRM or DENY.\n\n";
+            node.displayText = $"\nAre you sure you want to refresh the current Company buying rate?\n\nThis can refresh;\nPER DAY: {BuyRateModifier.refreshLimitDaily.Value}\nPER QUOTA: {BuyRateModifier.refreshLimitQuota.Value}\nLAST DAY BONUS: +{BuyRateModifier.refreshCountLDBonus.Value}\n\nPlease CONFIRM or DENY.\n\n";
             node.overrideOptions = true;
             node.terminalEvent = "refresh rate";
             node.terminalOptions = [ ConfirmedNoun(), DeniedNoun() ];
@@ -77,26 +77,37 @@ internal static class TerminalPatch
     [HarmonyPrefix]
     public static void OnPreLoadNewNode( Terminal __instance, TerminalNode node )
     {
-        int refreshLimit = BuyRateModifier.refreshLimit.Value;
+        int refreshLimitDaily = BuyRateModifier.refreshLimitDaily.Value;
+        int refreshLimitQuota = BuyRateModifier.refreshLimitQuota.Value;
 
-        // if Confirmed & under limit
-        if(node.terminalEvent is BuyRateTerminalEvents.RefreshConfirmed && BuyRateState.Value.RefreshCount < refreshLimit)
+        //bool hasEnoughCredits = HUDManager.Instance.terminalScript.groupCredits >= BuyRateModifier.refreshCost.Value;
+
+        // if Confirmed & under daily limit & under quota limit
+        if (node.terminalEvent is BuyRateTerminalEvents.RefreshConfirmed && BuyRateState.Value.RefreshCountDaily < refreshLimitDaily && BuyRateState.Value.RefreshCountQuota < refreshLimitQuota)
         {
             // Call refresher and increment count
             BuyRateRefresher.Refresh( true );
-            BuyRateState.Value.RefreshCount++;
+            BuyRateState.Value.RefreshCountDaily++;
+            BuyRateState.Value.RefreshCountQuota++;
+            /*
+            // Charge credits
+            HUDManager.Instance.terminalScript.groupCredits -= BuyRateModifier.refreshCost.Value;
+            HUDManager.Instance.terminalScript.SyncGroupCreditsServerRpc(
+                HUDManager.Instance.terminalScript.groupCredits,
+                HUDManager.Instance.terminalScript.numberOfItemsInDropship
+            );*/
 
             int roundedRate = (int)Math.Round( StartOfRound.Instance.companyBuyingRate * 100 );
-            node.displayText = "\nThe Company's buying rates have been updated.\n\nThe Company is currently buying scrap at " + roundedRate + "%\n\n";
+            node.displayText = "\nThe Company's buying rates have been updated.\n\nThe Company is currently buying scrap at <color=#ffc526>" + roundedRate + "%</color>\n\n";
 
-            BuyRateModifier.mls.LogInfo( $"Manual buy rate refresh accepted: (count: {BuyRateState.Value.RefreshCount}, rate: {roundedRate})" );
+            BuyRateModifier.mls.LogInfo( $"Manual buy rate refresh accepted: (daily refresh count: {BuyRateState.Value.RefreshCountDaily}, quota refresh count: {BuyRateState.Value.RefreshCountQuota}, rate: {roundedRate})" );
         }
         // if Confirmed & over limit
-        else if(node.terminalEvent is BuyRateTerminalEvents.RefreshConfirmed && BuyRateState.Value.RefreshCount >= refreshLimit)
+        else if(node.terminalEvent is BuyRateTerminalEvents.RefreshConfirmed && (BuyRateState.Value.RefreshCountDaily >= refreshLimitDaily || BuyRateState.Value.RefreshCountQuota >= refreshLimitQuota))
         {
             node.displayText = "\nWe are unable to refresh the Company's buying rates at this time.\n\n";
 
-            BuyRateModifier.mls.LogInfo( $"Manual buy rate refresh denied (count: {BuyRateState.Value.RefreshCount})" );
+            BuyRateModifier.mls.LogInfo( $"Manual buy rate refresh denied (daily count: {BuyRateState.Value.RefreshCountDaily}, quota refresh count: {BuyRateState.Value.RefreshCountQuota})" );
         }
     }
 

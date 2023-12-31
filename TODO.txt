@@ -1,0 +1,14 @@
+Bugs:
+- Quota refresh counter is reset upon closing the game and re-entering
+- Quota refresh counter is not specific to the current save file
+    - Fix both by utilizing save files ?
+
+QoL:
+- List reason refresh was denied
+    - Just need some if statements
+- Update refreshes remaining in terminal
+    - Rework the entire goddamn terminal probably, cause it loads that text on Awake so it can't be changed later atm
+
+Features:
+- Add cost for using refresh command (BuyRateModifier.refreshCost.Value)
+    - RPC bullshit with syncing credits, idk it broke the terminal when I tried Techy's method

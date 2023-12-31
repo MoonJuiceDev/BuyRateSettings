@@ -19,6 +19,7 @@ namespace BuyRateSettings
         public static ConfigEntry<bool> randomRateToggle = default!;
 
         public static ConfigEntry<bool> lastDayToggle = default!;
+        public static ConfigEntry<float> lastDayRangeChance = default!;
         public static ConfigEntry<float> lastDayMinRate = default!;
         public static ConfigEntry<float> lastDayMaxRate = default!;
 
@@ -33,7 +34,10 @@ namespace BuyRateSettings
         public static ConfigEntry<float> alertDelaySeconds = default!;
 
         public static ConfigEntry<bool> terminalToggle = default!;
-        public static ConfigEntry<int> refreshLimit = default!;
+        public static ConfigEntry<int> refreshCost = default!;
+        public static ConfigEntry<int> refreshLimitDaily = default!;
+        public static ConfigEntry<int> refreshLimitQuota = default!;
+        public static ConfigEntry<int> refreshCountLDBonus = default!;
 
         private static BuyRateModifier Instance;
 
@@ -56,6 +60,7 @@ namespace BuyRateSettings
             randomRateToggle = Config.Bind("Random Rate", "Random Rate Enabled", true, "Randomize the daily buy rate within the minimum/maximum that is set.");
 
             lastDayToggle = Config.Bind("Last Day Rate", "Last Day Rate Enabled", true, "Guarantees a specified buy rate range on the last day of the deadline.\nIf you want a specific rate, set both the Last Day Min/Max to the same values.\nI recommended having this on while using random rate, so you aren't screwed from a bad roll on the last day.");
+            lastDayRangeChance = Config.Bind("Last Day Rate", "Last Day Random Chance", 0.3f, "The chance for the last day rate to be randomized within the 'Last Day Min/Max' range instead of being the default 100% (0.3 = 30%)\n1.0 = Always randomized, 0.0 = Never randomized (always the default 100% rate)");
             lastDayMinRate = Config.Bind("Last Day Rate", "Last Day Minimum Rate", 1.0f, "The minimum rate to occur on the last day of the deadline (1.0 = 100%).");
             lastDayMaxRate = Config.Bind("Last Day Rate", "Last Day Maximum Rate", 1.2f, "The maximum rate to occur on the last day of the deadline (1.2 = 120%).");
 
@@ -70,7 +75,10 @@ namespace BuyRateSettings
             alertDelaySeconds = Config.Bind("Alerts", "Alert Delay", 3f, "Number of seconds to wait to display the alert.\nTo prevent overlapping with other mods like BetterEXP and DiscountAlerts, I recommend 8+ seconds.");
 
             terminalToggle = Config.Bind("Terminal", "Refresh From Terminal Enabled", true, "Enables refreshing the buy rate from the terminal.\nThis refresh will follow all the rules you have set for min/max, last day, jackpot, etc.");
-            refreshLimit = Config.Bind("Terminal", "Refresh Usage Per Day", 1, "The number of times the buy rate can be refreshed per day.");
+            refreshCost = Config.Bind("Terminal", "Refresh Cost", 50, "The number of credits to remove upon using the refresh rate command.");
+            refreshLimitDaily = Config.Bind("Terminal", "Refresh Usage Per Day", 1, "The number of times the buy rate can be refreshed per day.");
+            refreshLimitQuota = Config.Bind("Terminal", "Refresh Usage Per Quota", 2, "The number of times the buy rate can be refreshed per quota (if you have the daily usage set to 0, this won't work. Use your head).");
+            refreshCountLDBonus = Config.Bind("Terminal", "Extra Refreshes On Last Day", 1, "The number of extra rate refresh uses to give on the last day of quota.");
 
 
             // Patching & Logging
