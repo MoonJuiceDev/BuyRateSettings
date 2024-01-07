@@ -2,10 +2,10 @@
 
 	<PropertyGroup>
 		<Title>RateSettings</Title>
-		<Description>In-game alerts, jackpots, terminal command to refresh rate, min/max, randomizer, last day rates</Description>
+		<Description>In-game alerts, jackpots, min/max, randomizer, last day rates</Description>
 		<PluginId>MoonJuice.BuyRateSettings</PluginId>
     <ThunderId>BuyRateSettings</ThunderId>
-		<Version>1.2.1</Version>
+		<Version>1.3.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
