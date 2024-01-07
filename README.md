@@ -49,4 +49,4 @@ If you've encountered an error or have a feature request, please search for the 
 
 When reporting an error, please include as much information as possible, such as any errors or logs from BepInEx, or the version of the game or mod.
 
-Alternatively, you may submit an issue on the mod's [GitHub]() page or submit a PR to contribute to the mod ('m shifting focus to other mods so I may not be adding many more features to it).
+Alternatively, you may submit an issue on the mod's [GitHub](https://github.com/MoonJuiceDev/BuyRateSettings) page or submit a PR to contribute to the mod ('m shifting focus to other mods so I may not be adding many more features to it).
