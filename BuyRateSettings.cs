@@ -1,7 +1,5 @@
-﻿using BepInEx;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using BepInEx.Logging;
-using HarmonyLib;
 using BuyRateSettings.Patches;
 
 namespace BuyRateSettings
@@ -32,12 +30,6 @@ namespace BuyRateSettings
         public static ConfigEntry<bool> jackpotAlertToggle = default!;
         public static ConfigEntry<bool> buyRateAlertToggle = default!;
         public static ConfigEntry<float> alertDelaySeconds = default!;
-
-        public static ConfigEntry<bool> terminalToggle = default!;
-        public static ConfigEntry<int> refreshCost = default!;
-        public static ConfigEntry<int> refreshLimitDaily = default!;
-        public static ConfigEntry<int> refreshLimitQuota = default!;
-        public static ConfigEntry<int> refreshCountLDBonus = default!;
 
         private static BuyRateModifier Instance;
 
@@ -74,12 +66,6 @@ namespace BuyRateSettings
             jackpotAlertToggle = Config.Bind("Alerts", "Jackpot Alerts Enabled", true, "Shows a red message on screen with the jackpot buy rate (will show as SCRAP EMERGENCY).");
             alertDelaySeconds = Config.Bind("Alerts", "Alert Delay", 3f, "Number of seconds to wait to display the alert.\nTo prevent overlapping with other mods like BetterEXP and DiscountAlerts, I recommend 8+ seconds.");
 
-            terminalToggle = Config.Bind("Terminal", "Refresh From Terminal Enabled", true, "Enables refreshing the buy rate from the terminal.\nThis refresh will follow all the rules you have set for min/max, last day, jackpot, etc.");
-            refreshCost = Config.Bind("Terminal", "Refresh Cost", 50, "The number of credits to remove upon using the refresh rate command.");
-            refreshLimitDaily = Config.Bind("Terminal", "Refresh Usage Per Day", 1, "The number of times the buy rate can be refreshed per day.");
-            refreshLimitQuota = Config.Bind("Terminal", "Refresh Usage Per Quota", 2, "The number of times the buy rate can be refreshed per quota (if you have the daily usage set to 0, this won't work. Use your head).");
-            refreshCountLDBonus = Config.Bind("Terminal", "Extra Refreshes On Last Day", 1, "The number of extra rate refresh uses to give on the last day of quota.");
-
 
             // Patching & Logging
             mls = BepInEx.Logging.Logger.CreateLogSource(GeneratedPluginInfo.Identifier);
@@ -88,11 +74,6 @@ namespace BuyRateSettings
 
             harmony.PatchAll(typeof(BuyRateModifier));
             harmony.PatchAll(typeof(TimeOfDayPatch));
-
-            if (terminalToggle.Value)
-            {
-                harmony.PatchAll(typeof(TerminalPatch));
-            }
 
             mls.LogInfo("The Company's buy rates have been patched!");
         }
