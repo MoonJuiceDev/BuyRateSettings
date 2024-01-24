@@ -1,3 +1,8 @@
+## 1.3.1
+- Fixed desync issues (all RNG is now seed based)
+- Fixed Jackpot Rate on any day (it was doing any day _except_ the last day)
+- Config now syncs with host (alert popups are still client-sided)
+
 ## 1.3.0
 - Removed terminal command (it didn't sync with host properly and had issues with changing save files or reloading the game. I'm shifting focus to other mods so I don't have the time or interest in fixing this lol)
     - DELETE YOUR OLD CONFIG FILE TO REMOVE THE TERMINAL STUFF

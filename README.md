@@ -1,10 +1,12 @@
 # Buy Rate Settings
 Adds a bunch of modifiers for the Company's buying rates, along with alerts and jackpots!
 
+All players need the mod installed. Config will sync with host.
+
 ![normal alert](https://i.imgur.com/yl0HCBi.png)
 ![jackpot alert](https://i.imgur.com/nqfuCEz.png)
 
-## Current features include:
+## Current Features:
 
 - Buy rate alerts
 - Minimum rate
@@ -45,8 +47,9 @@ Made with [LethalCompany.Plugin.Sdk](https://github.com/Cryptoc1/lc-plugin-sdk) 
 - Use the Alert Delay setting to avoid conflicts with other mods that trigger the same type of alert at the same time (BetterEXP, DiscountAlerts, etc). I don't suggest setting the delay lower than 3 seconds.
 
 ## Bug Reports, Feature Requests, & Contributing
-If you've encountered an error or have a feature request, please search for the mod in the [Lethal Company Modding](https://discord.gg/lcmod) Discord server and find the respective forum channel.
 
-When reporting an error, please include as much information as possible, such as any errors or logs from BepInEx, or the version of the game or mod.
+If you've encountered an error or have a feature request, you may submit an issue on the mod's [GitHub](https://github.com/MoonJuiceDev/BuyRateSettings) page or submit a PR to contribute to the mod (I'm shifting focus to other mods so I may not be adding many more features to it).
 
-Alternatively, you may submit an issue on the mod's [GitHub](https://github.com/MoonJuiceDev/BuyRateSettings) page or submit a PR to contribute to the mod ('m shifting focus to other mods so I may not be adding many more features to it).
+Alternatively, you can find me in the [Lethal Company Modding](https://discord.gg/lcmod) Discord server.
+
+When reporting an error, please include as much information as possible, such as any errors or logs from BepInEx, or a profile code for Thunderstore/R2modman.

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="LethalCompany.Plugin.Sdk/1.0.2">
 
 	<PropertyGroup>
-		<Title>RateSettings</Title>
+		<Title>BuyRateSettings</Title>
 		<Description>In-game alerts, jackpots, min/max, randomizer, last day rates</Description>
 		<PluginId>MoonJuice.BuyRateSettings</PluginId>
     <ThunderId>BuyRateSettings</ThunderId>
-		<Version>1.3.0</Version>
+		<Version>1.3.1</Version>
     <ThunderWebsiteUrl>https://github.com/MoonJuiceDev/BuyRateSettings</ThunderWebsiteUrl>
 	</PropertyGroup>
 
