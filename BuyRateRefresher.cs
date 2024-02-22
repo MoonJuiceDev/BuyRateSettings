@@ -59,7 +59,7 @@ public static class BuyRateRefresher
 
 
         // Check for jackpot on last day and roll
-        if (jackpotToggle && rateSeedRemainder <= jackpotChance && jackpotToggleLD && daysUntilDeadline <= 0)
+        if (jackpotToggle && rateSeedRemainder <= jackpotChance && jackpotToggleLD && daysUntilDeadline == 0)
         {
             // Last day jackpot range
             if (jackpotMinRate != jackpotMaxRate)
@@ -103,7 +103,7 @@ public static class BuyRateRefresher
         }
 
         // Check/set last day rate range
-        else if (lastDayToggle && daysUntilDeadline <= 0)
+        else if (lastDayToggle && daysUntilDeadline == 0)
         {
             // Last day random range hit
             if (lastDayMinRate != lastDayMaxRate && rateSeedRemainder <= lastDayRangeChance)
